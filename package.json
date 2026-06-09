@@ -1,0 +1,9 @@
+{
+  "name": "ig-follower-vercel",
+  "version": "1.0.0",
+  "main": "api/follow.js",
+  "dependencies": {
+    "@sparticuz/chromium": "^123.0.0",
+    "puppeteer-core": "^22.6.0"
+  }
+}
