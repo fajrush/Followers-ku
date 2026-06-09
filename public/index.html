@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IG Injector - Vercel Edition</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f11; color: #fff; text-align: center; padding: 40px 20px; }
+        .container { background: #18181c; padding: 30px; border-radius: 12px; max-width: 450px; margin: 0 auto; box-shadow: 0 4px 25px rgba(0,0,0,0.5); }
+        input, textarea { display: block; width: 100%; padding: 12px; margin: 15px 0; background: #26262b; border: 1px solid #3f3f46; color: #fff; border-radius: 6px; box-sizing: border-box; }
+        textarea { height: 100px; resize: none; font-size: 11px; }
+        button { padding: 12px; background: #e1306c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s; }
+        button:hover { background: #c13584; }
+        #status { margin-top: 15px; font-weight: bold; color: #38bdf8; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>IG Follower (Vercel Serverless)</h2>
+        <p style="font-size: 13px; color: #a1a1aa;">Sistem menggunakan Cookies akun tumbal agar lolos verifikasi Vercel.</p>
+        
+        <input type="text" id="target" placeholder="Username Target (Contoh: Cristiano)">
+        <textarea id="cookies" placeholder='Paste JSON Cookies Akun Tumbal di sini...'></textarea>
+        
+        <button onclick="tembakFollower()">Jalankan Bot Follow</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        async function tembakFollower() {
+            const status = document.getElementById('status');
+            const target = document.getElementById('target').value;
+            const cookiesString = document.getElementById('cookies').value;
+            
+            if(!target || !cookiesString) return alert("Isi semua data terlebih dahulu, bro!");
+
+            let parsedCookies;
+            try {
+                parsedCookies = JSON.parse(cookiesString);
+            } catch (e) {
+                return alert("Format Cookies salah! Harus berformat JSON Array.");
+            }
+
+            status.innerText = "Serverless Vercel sedang bekerja... (Bisa memakan waktu hingga 30 detik)";
+
+            try {
+                const response = await fetch('/api/follow', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ targetFollow: target, cookies: parsedCookies })
+                });
+
+                const data = await response.json();
+                status.innerText = data.message;
+            } catch (error) {
+                status.innerText = "Terjadi error atau Vercel Timeout (Max 10 detik untuk akun free).";
+            }
+        }
+    </script>
+</body>
+</html>
